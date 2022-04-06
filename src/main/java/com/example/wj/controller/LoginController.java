@@ -50,4 +50,10 @@ public class LoginController {
         return ResultFactory.buildFailResult("未知错误");
     }
 
+    @GetMapping("/api/logout")
+    public Result logout() {
+        Subject subject = SecurityUtils.getSubject();
+        subject.logout();
+        return ResultFactory.buildSuccessResult("成功登出");
+    }
 }
