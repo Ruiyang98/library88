@@ -1,10 +1,17 @@
 package com.example.wj.pojo;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.*;
+
 import javax.persistence.*;
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Entity
 @Table(name = "user")
+@ToString
 @JsonIgnoreProperties({"handler","hibernateLazyInitializer"})
 
 public class User {
@@ -15,6 +22,7 @@ public class User {
 
     String username;
     String password;
+    String salt;
 
     public int getId() {
         return id;
@@ -38,5 +46,13 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getSalt() {
+        return salt;
+    }
+
+    public void setSalt(String salt) {
+        this.salt = salt;
     }
 }
