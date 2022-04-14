@@ -27,6 +27,8 @@ public class LoginController {
 
         // subject.getSession().setTimeout(10000);
         UsernamePasswordToken usernamePasswordToken = new UsernamePasswordToken(username, requestUser.getPassword());
+        // 加入remeberme
+        usernamePasswordToken.setRememberMe(true);
         try {
             subject.login(usernamePasswordToken);
             return ResultFactory.buildSuccessResult(username);
@@ -55,5 +57,10 @@ public class LoginController {
         Subject subject = SecurityUtils.getSubject();
         subject.logout();
         return ResultFactory.buildSuccessResult("成功登出");
+    }
+
+    @GetMapping("/api/authentication")
+    public String authentication() {
+        return "身份认证成功";
     }
 }

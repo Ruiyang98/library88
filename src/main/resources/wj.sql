@@ -90,3 +90,227 @@ INSERT INTO `category` VALUES ('4', '生活');
 INSERT INTO `category` VALUES ('5', '经管');
 INSERT INTO `category` VALUES ('6', '科技');
 
+
+/*
+2022.4.5
+博客（十三）使用 Shiro 实现用户信息加密与登录认证
+1、数据库的 user 表中添加 salt 字段
+*/
+
+
+-- ----------------------------
+-- Table structure for user
+-- ----------------------------
+DROP TABLE IF EXISTS `user`;
+CREATE TABLE `user` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `username` CHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `password` VARCHAR(255) DEFAULT NULL,
+  `salt` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
+  -- `name` varchar(255) DEFAULT NULL,
+  -- `phone` varchar(255) DEFAULT NULL,
+  -- `email` varchar(255) DEFAULT NULL,
+  `enabled` TINYINT(1) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=INNODB AUTO_INCREMENT=110 DEFAULT CHARSET=utf8;
+
+
+-- ----------------------------
+-- Records of user
+-- ----------------------------
+INSERT INTO `user` VALUES ('1', 'admin', '35b9529f89cfb9b848060ca576237e17', '8O+vDNr2sI3N82BI31fu1A==', '管理员', '12312312312', 'evan_nightly@163.com', '1');
+INSERT INTO `user` VALUES ('2', 'test', '85087738b6c1e1d212683bfafc163853', 'JBba3j5qRykIPJQYTNNH9A==', '测试', '12312312312', '123@123.com', '1');
+INSERT INTO `user` VALUES ('3', 'editor', '8583a2d965d6159edbf65c82d871fa3e', 'MZTe7Qwf9QgXBXrZzTIqJQ==', '编辑', NULL, NULL, '1');
+
+
+UPDATE `user` SET enabled='1' WHERE id='110';
+
+SELECT * FROM `user`;
+
+
+/*
+2022.4.6
+博客（十五）用户管理系统及后台开发
+1、设计角色表
+2、设计菜单表
+3、两个对应表：用户对应角色表、角色对应菜单表
+4、加上用户表，一共五张表作为后台开发的数据库
+*/
+
+
+-- ----------------------------
+-- Table structure for admin_role
+-- ----------------------------
+DROP TABLE IF EXISTS `admin_role`;
+CREATE TABLE `admin_role` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(100) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
+  `name_zh` VARCHAR(100) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
+  `enabled` TINYINT(1) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=INNODB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of admin_role
+-- ----------------------------
+INSERT INTO `admin_role` VALUES ('1', 'sysAdmin', '系统管理员', '1');
+INSERT INTO `admin_role` VALUES ('2', 'contentManager', '内容管理员', '1');
+INSERT INTO `admin_role` VALUES ('3', 'visitor', '访客', '1');
+INSERT INTO `admin_role` VALUES ('9', 'test', '测试角色', '1');
+
+
+
+-- ----------------------------
+-- Table structure for admin_menu
+-- ----------------------------
+DROP TABLE IF EXISTS `admin_menu`;
+CREATE TABLE `admin_menu` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `path` VARCHAR(64) DEFAULT NULL,
+  `name` VARCHAR(64) DEFAULT NULL,
+  `name_zh` VARCHAR(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `icon_cls` VARCHAR(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `component` VARCHAR(64) DEFAULT NULL,
+  `parent_id` INT(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=INNODB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- ----------------------------
+-- Records of admin_menu
+-- ----------------------------
+INSERT INTO `admin_menu` VALUES ('1', '/admin', 'AdminIndex', '首页', 'el-icon-s-home', 'AdminIndex', '0');
+INSERT INTO `admin_menu` VALUES ('2', '/admin/dashboard', 'DashboardAdmin', '运行情况', NULL, 'dashboard/admin/index', '1');
+INSERT INTO `admin_menu` VALUES ('3', '/admin', 'User', '用户管理', 'el-icon-user', 'AdminIndex', '0');
+INSERT INTO `admin_menu` VALUES ('4', '/admin', 'Content', '内容管理', 'el-icon-tickets', 'AdminIndex', '0');
+INSERT INTO `admin_menu` VALUES ('5', '/admin', 'System', '系统配置', 'el-icon-s-tools', 'AdminIndex', '0');
+INSERT INTO `admin_menu` VALUES ('6', '/admin/user/profile', 'Profile', '用户信息', NULL, 'user/UserProfile', '3');
+INSERT INTO `admin_menu` VALUES ('7', '/admin/user/role', 'Role', '角色配置', NULL, 'user/Role', '3');
+INSERT INTO `admin_menu` VALUES ('8', '/admin/content/book', 'BookManagement', '图书管理', NULL, 'content/BookManagement', '4');
+INSERT INTO `admin_menu` VALUES ('9', '/admin/content/banner', 'BannerManagement', '广告管理', NULL, 'content/BannerManagement', '4');
+INSERT INTO `admin_menu` VALUES ('10', '/admin/content/article', 'ArticleManagement', '文章管理', NULL, 'content/ArticleManagement', '4');
+
+
+
+-- ----------------------------
+-- Table structure for admin_role_menu
+-- ----------------------------
+DROP TABLE IF EXISTS `admin_role_menu`;
+CREATE TABLE `admin_role_menu` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `rid` INT(11) DEFAULT NULL,
+  `mid` INT(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=INNODB AUTO_INCREMENT=194 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+
+-- ----------------------------
+-- Records of admin_role_menu
+-- ----------------------------
+INSERT INTO `admin_role_menu` VALUES ('19', '4', '1');
+INSERT INTO `admin_role_menu` VALUES ('20', '4', '2');
+INSERT INTO `admin_role_menu` VALUES ('21', '3', '1');
+INSERT INTO `admin_role_menu` VALUES ('22', '3', '2');
+INSERT INTO `admin_role_menu` VALUES ('23', '9', '1');
+INSERT INTO `admin_role_menu` VALUES ('24', '9', '2');
+INSERT INTO `admin_role_menu` VALUES ('121', '1', '1');
+INSERT INTO `admin_role_menu` VALUES ('122', '1', '2');
+INSERT INTO `admin_role_menu` VALUES ('123', '1', '3');
+INSERT INTO `admin_role_menu` VALUES ('124', '1', '6');
+INSERT INTO `admin_role_menu` VALUES ('125', '1', '7');
+INSERT INTO `admin_role_menu` VALUES ('126', '1', '4');
+INSERT INTO `admin_role_menu` VALUES ('127', '1', '8');
+INSERT INTO `admin_role_menu` VALUES ('128', '1', '9');
+INSERT INTO `admin_role_menu` VALUES ('129', '1', '10');
+INSERT INTO `admin_role_menu` VALUES ('130', '1', '5');
+INSERT INTO `admin_role_menu` VALUES ('188', '2', '1');
+INSERT INTO `admin_role_menu` VALUES ('189', '2', '2');
+INSERT INTO `admin_role_menu` VALUES ('190', '2', '4');
+INSERT INTO `admin_role_menu` VALUES ('191', '2', '8');
+INSERT INTO `admin_role_menu` VALUES ('192', '2', '9');
+INSERT INTO `admin_role_menu` VALUES ('193', '2', '10');
+
+
+-- ----------------------------
+-- Table structure for admin_user_role
+-- ----------------------------
+DROP TABLE IF EXISTS `admin_user_role`;
+CREATE TABLE `admin_user_role` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `uid` INT(11) DEFAULT NULL,
+  `rid` INT(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_operator_role_operator_1` (`uid`),
+  KEY `fk_operator_role_role_1` (`rid`)
+) ENGINE=INNODB AUTO_INCREMENT=68 DEFAULT CHARSET=utf8;
+
+
+-- ----------------------------
+-- Records of admin_user_role
+-- ----------------------------
+INSERT INTO `admin_user_role` VALUES ('40', '24', '2');
+INSERT INTO `admin_user_role` VALUES ('63', '3', '2');
+INSERT INTO `admin_user_role` VALUES ('64', '1', '1');
+INSERT INTO `admin_user_role` VALUES ('67', '2', '3');
+
+
+-- ----------------------------
+SELECT * FROM `admin_user_role`;
+SELECT * FROM `admin_role_menu`;
+SELECT * FROM `admin_role`;
+SELECT * FROM `admin_menu`;
+
+
+
+/*
+2022.4.6
+博客（十五）用户管理系统及后台开发
+1、目前还不知道什么用的permission表
+*/
+
+
+-- ----------------------------
+-- Table structure for admin_permission
+-- ----------------------------
+DROP TABLE IF EXISTS `admin_permission`;
+CREATE TABLE `admin_permission` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(100) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
+  `desc_` VARCHAR(100) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
+  `url` VARCHAR(100) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=INNODB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of admin_permission
+-- ----------------------------
+INSERT INTO `admin_permission` VALUES ('1', 'users_management', '用户管理', '/api/admin/user');
+INSERT INTO `admin_permission` VALUES ('2', 'roles_management', '角色管理', '/api/admin/role');
+INSERT INTO `admin_permission` VALUES ('3', 'content_management', '内容管理', '/api/admin/content');
+
+
+-- ----------------------------
+-- Table structure for admin_role_permission
+-- ----------------------------
+DROP TABLE IF EXISTS `admin_role_permission`;
+CREATE TABLE `admin_role_permission` (
+  `id` INT(20) NOT NULL AUTO_INCREMENT,
+  `rid` INT(20) DEFAULT NULL,
+  `pid` INT(20) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_role_permission_role_1` (`rid`),
+  KEY `fk_role_permission_permission_1` (`pid`)
+) ENGINE=INNODB AUTO_INCREMENT=140 DEFAULT CHARSET=utf8;
+
+
+-- ----------------------------
+-- Records of admin_role_permission
+-- ----------------------------
+INSERT INTO `admin_role_permission` VALUES ('83', '5', '3');
+INSERT INTO `admin_role_permission` VALUES ('108', '1', '1');
+INSERT INTO `admin_role_permission` VALUES ('109', '1', '2');
+INSERT INTO `admin_role_permission` VALUES ('110', '1', '3');
+INSERT INTO `admin_role_permission` VALUES ('139', '2', '3');
+
+-- ----------------------------
+SELECT * FROM `admin_permission`;
+SELECT * FROM `admin_role_permission`;

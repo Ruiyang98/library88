@@ -25,11 +25,11 @@ public class WJRealm extends AuthorizingRealm {
     // 获取认证信息，即根据 token 中的用户名从数据库中获取密码、盐等并返回
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
-        String userName = token.getPrincipal().toString();
-        User user = userService.findByUserName(userName);
+        String username = token.getPrincipal().toString();
+        User user = userService.findByUserName(username);
         String passwordInDB = user.getPassword();
         String salt = user.getSalt();
-        SimpleAuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(userName, passwordInDB, ByteSource.Util.bytes(salt), getName());
+        SimpleAuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(username, passwordInDB, ByteSource.Util.bytes(salt), getName());
         return authenticationInfo;
     }
 }
