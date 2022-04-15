@@ -15,13 +15,14 @@ public class MenuController {
     @Autowired
     AdminMenuService adminMenuService;
 
-    @GetMapping("/api/menu")
+
     // 测试menu接口，看是否能查询到信息
+    @GetMapping("/api/menu")
     public List<AdminMenu> menu() {
         return adminMenuService.getMenusByCurrentUser();
 
-    // public Result menu() {
-    // return ResultFactory.buildSuccessResult(adminMenuService.getMenusByCurrentUser());
+     //public Result menu() {
+     //return ResultFactory.buildSuccessResult(adminMenuService.getMenusByCurrentUser());
     }
 
     @GetMapping("/api/admin/role/menu")

@@ -32,7 +32,7 @@ public class AdminMenuService {
         //String username = "admin";
         // 从数据库中获取当前用户
         String username = SecurityUtils.getSubject().getPrincipal().toString();
-        User user = userService.findByUserName(username);
+        User user = userService.findByUsername(username);
 
         // 获得当前用户对应的所有角色的 id 列表
         List<Integer> rids = adminUserRoleService.listAllByUid(user.getId())

@@ -124,6 +124,7 @@ INSERT INTO `user` VALUES ('3', 'editor', '8583a2d965d6159edbf65c82d871fa3e', 'M
 
 
 UPDATE `user` SET enabled='1' WHERE id='110';
+UPDATE `user` SET id='1' WHERE username='admin';
 
 SELECT * FROM `user`;
 
@@ -263,8 +264,9 @@ SELECT * FROM `admin_menu`;
 
 /*
 2022.4.6
-博客（十五）用户管理系统及后台开发
-1、目前还不知道什么用的permission表
+博客（十六）功能级访问控制的实现
+1、设计权限表
+2、扩充user表
 */
 
 
@@ -314,3 +316,32 @@ INSERT INTO `admin_role_permission` VALUES ('139', '2', '3');
 -- ----------------------------
 SELECT * FROM `admin_permission`;
 SELECT * FROM `admin_role_permission`;
+
+
+
+
+-- ----------------------------
+-- Table structure for user
+-- ----------------------------
+DROP TABLE IF EXISTS `user`;
+CREATE TABLE `user` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `username` CHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `password` VARCHAR(255) DEFAULT NULL,
+  `salt` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
+  `name` VARCHAR(255) DEFAULT NULL,
+  `phone` VARCHAR(255) DEFAULT NULL,
+  `email` VARCHAR(255) DEFAULT NULL,
+  `enabled` TINYINT(1) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=INNODB AUTO_INCREMENT=110 DEFAULT CHARSET=utf8;
+
+
+-- ----------------------------
+-- Records of user
+-- ----------------------------
+INSERT INTO `user` VALUES ('1', 'admin', '35b9529f89cfb9b848060ca576237e17', '8O+vDNr2sI3N82BI31fu1A==', '管理员', '12312312312', 'evan_nightly@163.com', '1');
+INSERT INTO `user` VALUES ('2', 'test', '85087738b6c1e1d212683bfafc163853', 'JBba3j5qRykIPJQYTNNH9A==', '测试', '12312312312', '123@123.com', '1');
+INSERT INTO `user` VALUES ('3', 'editor', '8583a2d965d6159edbf65c82d871fa3e', 'MZTe7Qwf9QgXBXrZzTIqJQ==', '编辑', NULL, NULL, '1');
+
+SELECT * FROM `user`;

@@ -6,10 +6,12 @@ import com.example.wj.result.ResultFactory;
 import com.example.wj.service.UserService;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
+import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.HtmlUtils;
 
 
 @RestController
@@ -23,6 +25,9 @@ public class LoginController {
     @PostMapping(value = "/api/login")
     public Result login(@RequestBody User requestUser) {
         String username = requestUser.getUsername();
+        // 转义，防止恶意注册导致打开对话框
+        username = HtmlUtils.htmlEscape(username);
+
         Subject subject = SecurityUtils.getSubject();
 
         // subject.getSession().setTimeout(10000);
@@ -31,11 +36,12 @@ public class LoginController {
         usernamePasswordToken.setRememberMe(true);
         try {
             subject.login(usernamePasswordToken);
+            // 此处可以判断用户是否禁用
             return ResultFactory.buildSuccessResult(username);
         } catch (AuthenticationException e) {
             String message = "账号密码错误";
             return ResultFactory.buildFailResult(message);
-        }
+        } // 此处加入账号不存在的提示信息，（？）提示已被捕获
     }
 
     @PostMapping("/api/register")

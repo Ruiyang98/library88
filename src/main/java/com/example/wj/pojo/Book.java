@@ -1,11 +1,15 @@
 package com.example.wj.pojo;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.Data;
+import lombok.ToString;
 
 import javax.persistence.*;
 
+@Data
 @Entity
 @Table(name = "book")
+@ToString
 @JsonIgnoreProperties({"handler","hibernateLazyInitializer"})
 public class Book {
     @Id
@@ -23,70 +27,6 @@ public class Book {
     String data;
     String press;
     String abs;
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public Category getCategory() {
-        return category;
-    }
-
-    public void setCategory(Category category) {
-        this.category = category;
-    }
-
-    public String getCover() {
-        return cover;
-    }
-
-    public void setCover(String cover) {
-        this.cover = cover;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getAuthor() {
-        return author;
-    }
-
-    public void setAuthor(String author) {
-        this.author = author;
-    }
-
-    public String getData() {
-        return data;
-    }
-
-    public void setData(String data) {
-        this.data = data;
-    }
-
-    public String getPress() {
-        return press;
-    }
-
-    public void setPress(String press) {
-        this.press = press;
-    }
-
-    public String getAbs() {
-        return abs;
-    }
-
-    public void setAbs(String abs) {
-        this.abs = abs;
-    }
 
 
 }

@@ -28,6 +28,11 @@ public class AdminRole {
 
     private boolean enabled;
 
+    // 用于存储当前角色所拥有的菜单的瞬态属性。
     @Transient
     private List<AdminMenu> menus;
+
+    // 用于存储当前角色所拥有的权限的瞬态属性。
+    @Transient
+    private List<AdminPermission> perms;
 }

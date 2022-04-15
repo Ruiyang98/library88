@@ -4,6 +4,9 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -18,41 +21,22 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    int id;
+    private int id;
 
-    String username;
-    String password;
-    String salt;
+    @NotEmpty(message = "用户名不能为空")
+    private String username;
 
-    public int getId() {
-        return id;
-    }
+    private String password;
+    private String name;
+    private String salt;
+    private String phone;
 
-    public void setId(int id) {
-        this.id = id;
-    }
+    @Email(message = "请输入正确的邮箱")
+    private String email;
+    private boolean enabled;
 
-    public String getUsername() {
-        return username;
-    }
+    // 用于存储当前用户拥有的角色的瞬态属性。
+    @Transient
+    private List<AdminRole> roles;
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getSalt() {
-        return salt;
-    }
-
-    public void setSalt(String salt) {
-        this.salt = salt;
-    }
 }
