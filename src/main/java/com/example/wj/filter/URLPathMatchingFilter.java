@@ -50,6 +50,7 @@ public class URLPathMatchingFilter extends PathMatchingFilter {
             return false;
         }
 
+        // 判断访问接口是否需要过滤（数据库中是否有对应信息）
         boolean needFilter = adminPermissionService.needFilter(requestAPI);
         if (!needFilter) {
             System.out.println("接口：" + requestAPI + "无需权限");
@@ -62,7 +63,9 @@ public class URLPathMatchingFilter extends PathMatchingFilter {
             String username = subject.getPrincipal().toString();
             Set<String> permissionAPIs = adminPermissionService.listPermissionURLsByUser(username);
             for (String api : permissionAPIs) {
-                if (api.equals(requestAPI)) {
+                // 匹配前缀
+                // if (api.equals(requestAPI)) {
+                if (requestAPI.startsWith(api)) {
                     hasPermission = true;
                     break;
                 }
